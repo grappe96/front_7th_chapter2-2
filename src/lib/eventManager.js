@@ -15,7 +15,7 @@ export function setupEventListeners(root) {
 
         if (handlers) {
           handlers.forEach((handler) => {
-            if (event.cancleBubble) {
+            if (event.cancelBubble) {
               return;
             }
             handler(event);
@@ -26,7 +26,11 @@ export function setupEventListeners(root) {
     }
   };
 
-  root.addEventListener("click", delegationHandler);
+  const eventTypes = ["click", "mouseover", "focus", "keydown"];
+
+  eventTypes.forEach((eventType) => {
+    root.addEventListener(eventType, delegationHandler);
+  });
 
   root.__isDelegated = true;
 }
