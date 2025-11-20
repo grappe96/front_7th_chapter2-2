@@ -13,6 +13,10 @@ export function setupEventListeners(root) {
     let target = event.target;
 
     while (target && target !== root) {
+      if (event.cancelBubble) {
+        break;
+      }
+
       if (eventDelegationMap.has(target)) {
         const elementMap = eventDelegationMap.get(target);
         const handlers = elementMap.get(event.type);
@@ -37,7 +41,7 @@ export function setupEventListeners(root) {
   rootHandlers.set(root, delegationHandler);
 
   commonEventTypes.forEach((eventType) => {
-    root.addEventListener(eventType, delegationHandler, true);
+    root.addEventListener(eventType, delegationHandler, false);
   });
 
   root.__isDelegated = true;
@@ -67,7 +71,7 @@ export function addEvent(element, eventType, handler) {
     const delegationHandler = rootHandlers.get(rootElement);
 
     if (!registeredTypes.has(eventType)) {
-      rootElement.addEventListener(eventType, delegationHandler, true);
+      rootElement.addEventListener(eventType, delegationHandler, false);
       registeredTypes.add(eventType);
     }
   }
