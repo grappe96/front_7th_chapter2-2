@@ -55,6 +55,25 @@ function updateAttributes($el, props) {
       addEvent($el, eventType, props[key]);
     } else if (key === "className") {
       $el.setAttribute("class", props[key]);
+    } else if (key === "value") {
+      // select, input, textarea 등에서 value 속성은 특별 처리
+      if (
+        $el.tagName === "SELECT" ||
+        $el.tagName === "INPUT" ||
+        $el.tagName === "TEXTAREA"
+      ) {
+        $el.value =
+          props[key] !== null && props[key] !== undefined
+            ? String(props[key])
+            : "";
+      } else {
+        $el.setAttribute(key, props[key]);
+      }
+    } else if (key === "selected") {
+      // option 요소의 selected 속성은 setAttribute로 처리하지 않고, value로 처리
+      if ($el.tagName === "OPTION") {
+        $el.selected = Boolean(props[key]);
+      }
     } else {
       $el.setAttribute(key, props[key]);
     }
