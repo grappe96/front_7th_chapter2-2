@@ -69,6 +69,16 @@ function updateAttributes($el, props) {
       } else {
         $el.setAttribute(key, props[key]);
       }
+    } else if (key === "checked") {
+      // checkbox, radio 등에서 checked 속성은 DOM 속성으로 직접 설정
+      if (
+        $el.tagName === "INPUT" &&
+        ($el.type === "checkbox" || $el.type === "radio")
+      ) {
+        $el.checked = Boolean(props[key]);
+      } else {
+        $el.setAttribute(key, props[key]);
+      }
     } else if (key === "selected") {
       // option 요소의 selected 속성은 setAttribute로 처리하지 않고, value로 처리
       if ($el.tagName === "OPTION") {
